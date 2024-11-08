@@ -32,3 +32,9 @@ correlation_matrix = numeric_data.corr()
 sns.heatmap(correlation_matrix, cmap="coolwarm", fmt=".2f")
 plt.title('Macierz korelacji między zmiennymi')
 plt.show()
+
+print("\nZbiór treningowy - Podsumowanie statystyczne:")
+print(train_data.describe())
+
+print("\nZbiór testowy - Podsumowanie statystyczne:")
+print(test_data.describe())
