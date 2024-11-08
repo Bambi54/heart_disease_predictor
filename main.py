@@ -25,3 +25,10 @@ plt.xlabel('Wartości docelowe')
 plt.ylabel('Częstotliwość')
 plt.show()
 
+# macierz korelacji
+plt.figure(figsize=(12, 10))
+numeric_data = data.select_dtypes(include=['float64', 'int64'])
+correlation_matrix = numeric_data.corr()
+sns.heatmap(correlation_matrix, cmap="coolwarm", fmt=".2f")
+plt.title('Macierz korelacji między zmiennymi')
+plt.show()
