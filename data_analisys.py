@@ -2,14 +2,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from ydata_profiling import ProfileReport
-from ucimlrepo import fetch_ucirepo
+from import_data import fetch_dataset
 
-predict_students_dropout_and_academic_success = fetch_ucirepo(id=697)
 
-X = predict_students_dropout_and_academic_success.data.features
-y = predict_students_dropout_and_academic_success.data.targets
-
-data = pd.concat([X, y], axis=1)
+data = fetch_dataset()
 
 print("Informacje o danych:")
 data.info()
