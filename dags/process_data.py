@@ -6,7 +6,7 @@ import pandas as pd
 
 
 def clean_data():
-    datasets = ['train_data.csv', 'test_data.csv']
+    datasets = ['model_data.csv', 'relearn_data.csv']
 
     for dataset in datasets:
         data = pd.read_csv(dataset)
@@ -19,7 +19,7 @@ def clean_data():
 
 
 def preprocess_data():
-    datasets = ['train_data', 'test_data']
+    datasets = ['model_data', 'relearn_data']
 
     for dataset in datasets:
         uncleaned_dataset = f'{dataset}.csv'

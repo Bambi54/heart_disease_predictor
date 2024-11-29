@@ -16,8 +16,8 @@ def fetch_dataset():
 def split_data():
     data = pd.read_csv('data.csv')
     train, test = train_test_split(data, test_size=0.3, random_state=42)
-    train.to_csv('train_data.csv', index=False)
-    test.to_csv('test_data.csv', index=False)
+    train.to_csv('model_data.csv', index=False)
+    test.to_csv('relearn_data.csv', index=False)
     os.remove('data.csv')
 
 
