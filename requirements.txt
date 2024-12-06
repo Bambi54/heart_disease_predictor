@@ -1,6 +1,7 @@
 numpy
 pandas
 apache-airflow
+apache-airflow[amazon]
 scikit-learn
 matplotlib
 ydata_profiling
