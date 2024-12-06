@@ -1,10 +1,15 @@
-import joblib
+import pickle
 import pandas as pd
 from sklearn.metrics import accuracy_score, precision_score, recall_score
+from sklearn.pipeline import Pipeline
 from tpot import TPOTClassifier
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime
+import logging
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 
 def train_model(params: dict):
@@ -15,27 +20,34 @@ def train_model(params: dict):
     tpot = TPOTClassifier(verbosity=2, generations=5, population_size=20, random_state=42)
     tpot.fit(X_train, y_train)
     
-    joblib.dump(tpot.fitted_pipeline_, params['model'])
+    with open(params['model'], 'wb+') as model_file:
+        pickle.dump(tpot.fitted_pipeline_, model_file)
+        logger.info(f"Model saved to {params['model']}.")
     
 
 def evaluate_model(params: dict):
+    logger.info("Starting model evaluation.")
     data = pd.read_csv(params['test_data'])
+    logger.info("Test data loaded successfully.")
+    
     X_test = data.drop(columns=['Target'])
     y_test = data['Target']
-    model = joblib.load(params['model'])
 
-    print('before model prediction')
+    with open(params['model'], 'rb') as model_file:
+        model = pickle.load(model_file)
+        logger.info(f"Model loaded from {params['model']}.")
+
     y_pred = model.predict(X_test)
-    
+    logger.info("Predictions generated.")
+
     accuracy = accuracy_score(y_test, y_pred)
-    precision = precision_score(y_test, y_pred)
-    recall = recall_score(y_test, y_pred)
     
-    report = f"Accuracy: {accuracy}\nPrecision: {precision}\nRecall: {recall}\n"
+    logger.info(f"Accuracy: {accuracy}")
     
-    print('before report write')
-    with open('evaluation_report.txt', 'w+') as f:
-        f.write(report)
+    report = f"Accuracy: {accuracy}"
+    with open('evaluation_report.txt', 'w+') as report_file:
+        report_file.write(report)
+        logger.info("Evaluation report written to evaluation_report.txt.")
 
 
 with DAG(
