@@ -1,4 +1,4 @@
-import pickle
+import joblib
 import pandas as pd
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 from tpot import TPOTClassifier
@@ -15,14 +15,14 @@ def train_model(params: dict):
     tpot = TPOTClassifier(verbosity=2, generations=5, population_size=20, random_state=42)
     tpot.fit(X_train, y_train)
     
-    pickle.dump(tpot, params['model'])
+    joblib.dump(tpot.fitted_pipeline_, params['model'])
     
 
 def evaluate_model(params: dict):
     data = pd.read_csv(params['test_data'])
     X_test = data.drop(columns=['Target'])
     y_test = data['Target']
-    model = pickle.load(params['model'])
+    model = joblib.load(params['model'])
 
     print('before model prediction')
     y_pred = model.predict(X_test)
