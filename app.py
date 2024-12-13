@@ -13,15 +13,9 @@ app = FastAPI()
 @app.post('/model/predict', tags=['model'],
           response_model=PredictResponse, status_code=200)
 async def predict(data: PredictDTO):
-    if not MODEL_FILE.exists():
-        raise HTTPException(status_code=404, detail='Model not found')
+    # if not MODEL_FILE.exists():
+    #     raise HTTPException(status_code=404, detail='Model not found')
     
-    # data = data.model_dump()
-    # x = data['x']
-
-    # y_pred = predict(x, file_name=model_file)
-    # data['y'] = y_pred
-
     response_obj = {'prediction': 1}
     return response_obj
 

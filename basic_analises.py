@@ -9,6 +9,7 @@ data = fetch_dataset()
 
 print("\nPierwsze 5 wierszy danych:")
 print(data.head())
+print(data.info())
 
 train_data, test_data = train_test_split(data, test_size=0.3, random_state=42)
 
