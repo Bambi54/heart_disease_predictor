@@ -8,6 +8,3 @@ ucimlrepo
 seaborn
 tpot
 gspread
-fastapi[standard]
-uvicorn
-pydantic

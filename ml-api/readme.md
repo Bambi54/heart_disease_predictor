@@ -2,14 +2,6 @@
 
 Ten projekt ustawia **środowisko Airflow**, które przetwarza dane, trenuje model uczenia maszynowego, a także udostępnia **serwis REST API** do przewidywania wypisów i sukcesów akademickich studentów. API udostępnia prosty interfejs do interakcji z wytrenowanym modelem.
 
-## Spis Treści
-- [Rozpoczęcie pracy](#rozpoczęcie-pracy)
-- [Ustawienie Airflow](#ustawienie-airflow)
-- [Ustawienie REST API](#ustawienie-rest-api)
-- [Testowanie API](#testowanie-api)
-  - [Za pomocą `curl`](#za-pomocą-curl)
-  - [Za pomocą Postman](#za-pomocą-postman)
-
 ## Rozpoczęcie pracy
 
 Aby rozpocząć, upewnij się, że masz zainstalowane **Docker** oraz **Docker Compose** na swoim komputerze.

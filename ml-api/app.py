@@ -17,14 +17,13 @@ async def predict(data: PredictDTO):
     if not MODEL_FILE.exists():
         raise HTTPException(status_code=404, detail=f'${MODEL_FILE} not found')
     
-    data = pd.DataFrame.from_dict(data.model_dump())
-
-    X_test = data.drop(columns=['Target'])
-
+    df = pd.DataFrame([data.model_dump(by_alias=True)])
     model = pickle.load(open(MODEL_FILE, 'rb'))
-    pred = model.predict([X_test])[0]
+    print(df.head())
+    pred = model.predict(df)
+    print(pred)
 
-    return {'prediction': pred}
+    return {'prediction': pred[0]}
 
 
 if __name__ == '__main__':
