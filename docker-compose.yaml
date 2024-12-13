@@ -78,6 +78,7 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
     - ${AIRFLOW_PROJ_DIR:-.}/requirements.txt:/requirements.txt
+    - ${AIRFLOW_PROJ_DIR:-.}/shared_data:/opt/airflow/shared
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
@@ -315,6 +316,17 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+
+  ml-api:
+    build:
+      context: ./ml-api
+    container_name: ml-api
+    ports:
+      - "5000:5000"
+    volumes:
+      - ${AIRFLOW_PROJ_DIR:-.}/shared_data:/opt/airflow/shared
+    environment:
+      MODEL_PATH: /app/shared/model.pkl
 
 volumes:
   postgres-db-volume:
