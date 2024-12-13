@@ -44,7 +44,6 @@
 #
 # Feel free to modify this file to suit your needs.
 ---
-version: '3.8'
 x-airflow-common:
   &airflow-common
   # In order to add custom dependencies or upgrade provider packages you can use your extended image.
@@ -181,6 +180,7 @@ services:
     volumes:
       - ./requirements.txt:/requirements.txt 
       - ${AIRFLOW_PROJ_DIR:-.}/dags:/opt/airflow/dags
+      - ${AIRFLOW_PROJ_DIR:-.}/shared_data:/opt/airflow/shared
     entrypoint: >
       /bin/bash -c "pip install --upgrade pip &&
       pip install -r /requirements.txt &&
@@ -325,8 +325,6 @@ services:
       - "5000:5000"
     volumes:
       - ${AIRFLOW_PROJ_DIR:-.}/shared_data:/opt/airflow/shared
-    environment:
-      MODEL_PATH: /app/shared/model.pkl
 
 volumes:
   postgres-db-volume:

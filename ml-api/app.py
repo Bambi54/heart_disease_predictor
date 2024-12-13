@@ -1,11 +1,12 @@
 import uvicorn, pickle
+import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pathlib import Path
 from dtos.predictDTO import PredictDTO
 from dtos.predictResponse import PredictResponse
 
 
-MODEL_FILE = Path('/app/shared/model.pkl')
+MODEL_FILE = Path('/opt/airflow/shared/model.pkl')
 
 app = FastAPI()
 
@@ -14,15 +15,14 @@ app = FastAPI()
           response_model=PredictResponse, status_code=200)
 async def predict(data: PredictDTO):
     if not MODEL_FILE.exists():
-        raise HTTPException(status_code=404, detail='Model not found')
+        raise HTTPException(status_code=404, detail=f'${MODEL_FILE} not found')
     
-    data = data.model_dump()
+    data = pd.DataFrame.from_dict(data.model_dump())
 
-    x = data['x']
-    y = data['y']
+    X_test = data.drop(columns=['Target'])
 
     model = pickle.load(open(MODEL_FILE, 'rb'))
-    pred = model.predict([x])[0]
+    pred = model.predict([X_test])[0]
 
     return {'prediction': pred}
 
