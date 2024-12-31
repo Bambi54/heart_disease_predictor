@@ -1,7 +1,7 @@
 import pickle
 import pandas as pd
-from sklearn.metrics import accuracy_score, precision_score, recall_score
-from sklearn.pipeline import Pipeline
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
 from tpot import TPOTClassifier
 from airflow import DAG
 from airflow.operators.python import PythonOperator
@@ -10,6 +10,14 @@ import logging
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
+
+def split_data(params:dict):
+    data = pd.read_csv(params['model_data'])
+    
+    train, test = train_test_split(data, test_size=0.3, random_state=42)
+    train.to_csv(params['train_data'], index=False)
+    test.to_csv(params['test_data'], index=False)
 
 
 def train_model(params: dict):
@@ -51,7 +59,7 @@ def evaluate_model(params: dict):
 
 
 with DAG(
-    'build_and_train_ml_model',
+    '4_building_model',
     start_date=datetime(2023, 1, 1),
     schedule_interval=None,
     catchup=False,
@@ -63,6 +71,11 @@ with DAG(
     }
 ) as dag:
 
+    train_test_split_task = PythonOperator(
+        task_id='train_test_split',
+        python_callable=split_data,
+    )
+
     train_model_task = PythonOperator(
         task_id='train_model',
         python_callable=train_model,
@@ -73,4 +86,4 @@ with DAG(
         python_callable=evaluate_model,
     )
 
-    train_model_task >> evaluate_model_task
+    train_test_split_task >> train_model_task >> evaluate_model_task

@@ -141,7 +141,6 @@ services:
         condition: service_completed_successfully
     volumes:
     - ${AIRFLOW_PROJ_DIR:-.}/dags:/opt/airflow/dags
-    - ${AIRFLOW_PROJ_DIR:-.}/airflow.cfg:/opt/airflow/airflow.cfg
 
   airflow-scheduler:
     <<: *airflow-common
@@ -160,7 +159,6 @@ services:
     volumes:
       - ./requirements.txt:/requirements.txt 
       - ${AIRFLOW_PROJ_DIR:-.}/dags:/opt/airflow/dags
-      - ${AIRFLOW_PROJ_DIR:-.}/airflow.cfg:/opt/airflow/airflow.cfg
     entrypoint: >
       /bin/bash -c "pip install --upgrade pip &&
       pip install -r /requirements.txt &&

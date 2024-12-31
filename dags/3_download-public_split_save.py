@@ -22,7 +22,7 @@ def split_data():
 
 
 with DAG(
-    dag_id='fetch_data_dag',
+    dag_id='3_download-public_split_save',
     start_date=datetime(2024, 1, 1),
     schedule_interval=None,
     catchup=False,

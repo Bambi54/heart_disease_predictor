@@ -1,7 +1,7 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler
 import pandas as pd
 
 
@@ -33,7 +33,7 @@ def preprocess_data():
 
 
 with DAG(
-    dag_id='process_data_dag',
+    dag_id='3_download-cloud_clean_standard-normalisate_save',
     start_date=datetime(2024, 1, 1),
     schedule_interval=None,
     catchup=False,
