@@ -44,7 +44,6 @@
 #
 # Feel free to modify this file to suit your needs.
 ---
-version: '3.8'
 x-airflow-common:
   &airflow-common
   # In order to add custom dependencies or upgrade provider packages you can use your extended image.
@@ -87,7 +86,7 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
     - ${AIRFLOW_PROJ_DIR:-.}/requirements.txt:/requirements.txt
-    - ${AIRFLOW_PROJ_DIR:-.}/airflow.cfg:/opt/airflow/airflow.cfg
+    - ${AIRFLOW_PROJ_DIR:-.}/shared_data:/opt/airflow/shared
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
@@ -192,7 +191,7 @@ services:
     volumes:
       - ./requirements.txt:/requirements.txt 
       - ${AIRFLOW_PROJ_DIR:-.}/dags:/opt/airflow/dags
-      - ${AIRFLOW_PROJ_DIR:-.}/airflow.cfg:/opt/airflow/airflow.cfg
+      - ${AIRFLOW_PROJ_DIR:-.}/shared_data:/opt/airflow/shared
     entrypoint: >
       /bin/bash -c "pip install --upgrade pip &&
       pip install -r /requirements.txt &&
@@ -328,6 +327,15 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+
+  ml-api:
+    build:
+      context: ./ml-api
+    container_name: ml-api
+    ports:
+      - "5000:5000"
+    volumes:
+      - ${AIRFLOW_PROJ_DIR:-.}/shared_data:/opt/airflow/shared
 
 volumes:
   postgres-db-volume:

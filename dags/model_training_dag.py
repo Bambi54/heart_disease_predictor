@@ -59,7 +59,7 @@ with DAG(
         'model_data': 'model_data_clean.csv',
         'train_data': 'train_data_clean.csv',
         'test_data': 'test_data_clean.csv',
-        'model': 'model.pkl'
+        'model': '/opt/airflow/shared/model.pkl'
     }
 ) as dag:
 
